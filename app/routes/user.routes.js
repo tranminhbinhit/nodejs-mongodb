@@ -1,14 +1,17 @@
   const userCtrl = require("../controllers/user.controller.js");
+  const { authJwt } = require("../middlewares");
+
 
   var router = require("express").Router();
 
   //Api mongo
-  router.post("/user/login", userCtrl.loginUser);
-  router.post("/user/create", userCtrl.createUser);
-  router.post("/user/update", userCtrl.updateUserInfo);
-  router.get("/user/info/:id", userCtrl.getUserInfo);
-  router.delete("/user/", userCtrl.deleteAll);
-  router.get("/user", userCtrl.findAll);
+  // router.post("/user/login", userCtrl.loginUser);
+  // router.post("/user/create", userCtrl.createUser);
+  router.post("/update", [authJwt.verifyToken], userCtrl.updateUserInfo);
+  router.get("/info",[authJwt.verifyToken], userCtrl.getUserInfo); 
+  router.get("/info/:id", userCtrl.getUserInfo); 
+  //router.delete("/", userCtrl.deleteAll);
+  router.get("/",[authJwt.verifyToken], userCtrl.findAll);
 
 
 

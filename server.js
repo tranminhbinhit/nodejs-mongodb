@@ -86,9 +86,9 @@ app.get("/", (req, res) => {
 
 
 //Api Card
-const cardRoutes = require("./app/routes/card.routes");
+const userRoutes = require("./app/routes/user.routes");
 const authRoutes = require("./app/routes/auth.routes");
-app.use("/api/card", cardRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 
 const PORT = process.env.PORT || 8080;
