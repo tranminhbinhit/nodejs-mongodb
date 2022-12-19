@@ -8,17 +8,6 @@ module.exports = mongoose => {
 
       isActive: Boolean,
       isDelete: Boolean,
-      
-      exchangeToken: String,
-      expiredDate: Date,
-      passwordToken: String,
-      isAdmin: Boolean,
-      roles: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Role"
-        }
-      ],
 
       socialLinkObj: Object,
       linkObj: Object,
