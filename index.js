@@ -80,9 +80,18 @@ db.mongoose
   
 
 // simple route
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to application." });
-});
+// app.get("/", (req, res) => {
+//   res.json({ message: "Welcome to application." });
+// });
+
+app.get(
+  "/",
+  function (request, response) {
+    response.sendFile(
+      __dirname + "/static/welcome-page.html"
+    );
+  }
+);
 
 
 //Api User
