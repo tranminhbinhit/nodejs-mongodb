@@ -5,7 +5,7 @@ yarn install
 
 ### Run
 ```
-node server.js
+node index.js
 ```
 
 
