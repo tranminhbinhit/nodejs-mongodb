@@ -85,7 +85,7 @@ app.get("/", (req, res) => {
 });
 
 
-//Api Card
+//Api User
 const userRoutes = require("./app/routes/user.routes");
 const authRoutes = require("./app/routes/auth.routes");
 app.use("/api/user", userRoutes);

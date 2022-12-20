@@ -1,135 +1,54 @@
 const {
   resultApiCreateUpdate,
-  isEmptyObject,
-  isEmpty,
   resultApi,
 } = require("../../src/utils/utils");
 const db = require("../models");
 const User = db.user;
 
-//=============================================================== Tạo tài khoản ===============================================================//
-exports.createUser = (req, res) => {
-  const { email, userName, fullName, password } = req.body;
-
-  // Validate request
-  if (!userName || !email || !password) {
-    res.status(400).send({ message: "Request is not valid !" });
-    return;
-  }
-
-  // Save User in the database
-  const filter = {
-    $or: [
-      {
-        email,
-      },
-      {
-        userName,
-      },
-    ],
-  };
-
-  const reqUser = {
-    email,
-    userName,
-    fullName,
-    password,
-    isActive: false,
-    isDelete: false,
-  };
-
-  const createNewUser = () => {
-    User.updateOne(
-      filter,
-      {
-        $setOnInsert: reqUser,
-      },
-      {
-        upsert: true,
-      }
-    )
-      .then((data) => {
-        const { upsertedId } = data;
-        res.send(
-          resultApiCreateUpdate(
-            upsertedId,
-            isEmpty(upsertedId)
-              ? "Tài khoản đã tồn tại"
-              : "Thêm tài khoản thành công"
-          )
-        );
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while creating the User.",
-        });
-      });
-  };
-
-  User.find({
-    email,
-  }).then((data) => {
-    if (!isEmptyObject(data)) {
-      res.send(resultApiCreateUpdate(0, "Email đã tồn tại"));
-    } else {
-      createNewUser();
-    }
-  });
-};
-
-//=============================================================== Đăng nhập tài khoản ===============================================================//
-exports.loginUser = (req, res) => {
-  const { userName, password } = req.body;
-  var filter = {
-    $or: [
-      {
-        userName,
-      },
-      {
-        email: userName,
-      },
-    ],
-    password,
-  };
-
-  User.findOne(filter)
-    .then((data) => {
-      res.send(resultApi(data));
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred.",
-      });
-    });
-};
 
 //=============================================================== Xem tài khoản ===============================================================//
 exports.getUserInfo = (req, res) => {
-  const id = req.params.id;
-
+  const id = req.userId;
   User.findById(id)
     .then((data) => {
       if (!data) {
         res
           .status(404)
-          .send(resultApi({ message: "Not found with id " + id }));
+          .send(resultApiCreateUpdate(0 , 'Request is not valid !'));
       } else {
         res.send(resultApi(data));
       }
     })
     .catch((err) => {
-      res.status(500).send({ message: "Error retrieving with id=" + id });
+      res.status(500).send(resultApiCreateUpdate(-1, err));
+    });
+};
+
+exports.getUserInfoByUser = (req, res) => {
+  const userName = req.params.userName;
+  User.find({userName})
+    .then((data) => {
+      if (!data) {
+        res
+          .status(404)
+          .send(resultApiCreateUpdate(0 , 'Request is not valid !'));
+      } else {
+        res.send(resultApi(data));
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(resultApiCreateUpdate(-1, err));
     });
 };
 
 //=============================================================== Cập nhật tài khoản tài khoản ===============================================================//
 exports.updateUserInfo = (req, res) => {
-  const { fullName, id, socialLinkObj, linkObj, userInfo } = req.body;
+  const id = req.userId;
+  const { fullName, socialLinkObj, linkObj, userInfo } = req.body;
 
   // Validate request
   if (!id) {
-    res.status(400).send({ message: "Request is not valid !" });
+    res.status(400).send(resultApiCreateUpdate(0 , 'Request is not valid !'));
     return;
   }
 
@@ -152,26 +71,7 @@ exports.updateUserInfo = (req, res) => {
       );
     })
     .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error",
-      });
-    });
-};
-
-//=============================================================== Xoá toàn bộ user ===============================================================//
-exports.deleteAll = (req, res) => {
-  User.deleteMany({})
-    .then((data) => {
-      res.send({
-        message: `${data.deletedCount} Tutorials were deleted successfully!`,
-      });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while removing all tutorials.",
-      });
+      res.status(500).send(resultApiCreateUpdate(-1, err));
     });
 };
 
@@ -184,12 +84,9 @@ exports.findAll = (req, res) => {
 
   User.find(condition)
     .then((data) => {
-      res.send(data);
+      res.send(resultApi(data));
     })
     .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials.",
-      });
+      res.status(500).send(resultApiCreateUpdate(-1, err));
     });
 };

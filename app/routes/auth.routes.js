@@ -13,9 +13,7 @@ var router = require("express").Router();
 
 router.post(
   "/signup",
-  [
-    verifySignUp.checkDuplicateUsernameOrEmail,
-  ],
+  [verifySignUp.checkDuplicateUsernameOrEmail],
   controller.signup
 );
 

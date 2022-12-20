@@ -141,3 +141,118 @@ exports.findAllPublished = (req, res) => {
       });
     });
 };
+
+
+//=============================================================== Tạo tài khoản ===============================================================//
+exports.createUser = (req, res) => {
+  const { email, userName, fullName, password } = req.body;
+
+  // Validate request
+  if (!userName || !email || !password) {
+    res.status(400).send({ message: "Request is not valid !" });
+    return;
+  }
+
+  // Save User in the database
+  const filter = {
+    $or: [
+      {
+        email,
+      },
+      {
+        userName,
+      },
+    ],
+  };
+
+  const reqUser = {
+    email,
+    userName,
+    fullName,
+    password,
+    isActive: false,
+    isDelete: false,
+  };
+
+  const createNewUser = () => {
+    User.updateOne(
+      filter,
+      {
+        $setOnInsert: reqUser,
+      },
+      {
+        upsert: true,
+      }
+    )
+      .then((data) => {
+        const { upsertedId } = data;
+        res.send(
+          resultApiCreateUpdate(
+            upsertedId,
+            isEmpty(upsertedId)
+              ? "Tài khoản đã tồn tại"
+              : "Thêm tài khoản thành công"
+          )
+        );
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while creating the User.",
+        });
+      });
+  };
+
+  User.find({
+    email,
+  }).then((data) => {
+    if (!isEmptyObject(data)) {
+      res.send(resultApiCreateUpdate(0, "Email đã tồn tại"));
+    } else {
+      createNewUser();
+    }
+  });
+};
+
+//=============================================================== Đăng nhập tài khoản ===============================================================//
+exports.loginUser = (req, res) => {
+  const { userName, password } = req.body;
+  var filter = {
+    $or: [
+      {
+        userName,
+      },
+      {
+        email: userName,
+      },
+    ],
+    password,
+  };
+
+  User.findOne(filter)
+    .then((data) => {
+      res.send(resultApi(data));
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred.",
+      });
+    });
+};
+
+
+//=============================================================== Xoá toàn bộ user ===============================================================//
+exports.deleteAll = (req, res) => {
+  User.deleteMany({})
+    .then((data) => {
+      res.send({
+        message: `${data.deletedCount} Tutorials were deleted successfully!`,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while removing all tutorials.",
+      });
+    });
+};
