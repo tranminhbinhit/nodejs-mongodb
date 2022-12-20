@@ -1,8 +1,8 @@
 {
-  "name": "node-express-mongodb",
+  "name": "nodejs-mongodb",
   "version": "1.0.0",
   "description": "Node.js Restful CRUD API with Node.js, Express and MongoDB",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,8 +15,8 @@
     "authorization",
     "mongodb"
   ],
-  "author": "bezkoder",
-  "license": "ISC",
+  "author": "minhbinh",
+  "license": "Enow",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
