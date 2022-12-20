@@ -6,6 +6,8 @@ yarn install
 ### Run
 ```
 node index.js
+or 
+yarn run start
 ```
 
 # Database
