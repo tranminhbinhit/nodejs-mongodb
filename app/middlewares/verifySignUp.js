@@ -7,12 +7,12 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     userName: req.body.userName
   }).exec((err, user) => {
     if (err) {
-      res.status(500).send({ message: err });
+      res.status(500).send(resultApiCreateUpdate(-1, err));
       return;
     }
 
     if (user) {
-      res.status(400).send({ message: "Failed! Username is already in use!" });
+      res.status(400).send(resultApiCreateUpdate(0, "Tài khoản đã tồn tại!"));
       return;
     }
 
@@ -21,12 +21,12 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
       email: req.body.email
     }).exec((err, user) => {
       if (err) {
-        res.status(500).send({ message: err });
+        res.status(500).send(resultApiCreateUpdate(-1, err));;
         return;
       }
 
       if (user) {
-        res.status(400).send({ message: "Failed! Email is already in use!" });
+        res.status(400).send(resultApiCreateUpdate(-1, "Email đã tồn tại"));
         return;
       }
 
