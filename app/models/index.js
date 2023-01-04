@@ -9,5 +9,6 @@ db.url = dbConfig.url;
 
 db.user = require("./user.model")(mongoose);
 db.refreshToken = require("./refreshToken.model");
+db.settingSystem = require("./settingSystem.model")(mongoose);
 
 module.exports = db;

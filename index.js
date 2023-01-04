@@ -97,8 +97,10 @@ app.get(
 //Api User
 const userRoutes = require("./app/routes/user.routes");
 const authRoutes = require("./app/routes/auth.routes");
+const settingRoutes = require("./app/routes/setting.routes");
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/setting", settingRoutes);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
