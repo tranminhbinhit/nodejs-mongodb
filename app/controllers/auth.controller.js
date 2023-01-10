@@ -59,7 +59,7 @@ exports.signin = (req, res) => {
     });
 
     let refreshToken = await RefreshToken.createToken(user);
-
+    const expiredTime = moment().add(config.jwtExpiration, 'seconds');
     res.status(200).send(
       resultApi({
         id: user._id,
@@ -68,8 +68,8 @@ exports.signin = (req, res) => {
         fullName: user.fullName,
         accessToken: token,
         refreshToken: refreshToken,
-        expiryTs: config.jwtExpiration,
-        expiredTime: moment().add(config.jwtExpiration, 'seconds').format('YYYY-MM-DD HH:mm:ss'),
+        expiryTs: expiredTime.unix(),
+        expiredTime: expiredTime.format('YYYY-MM-DD HH:mm:ss'),
         refreshExpirationTs: config.jwtRefreshExpiration
       })
     );
