@@ -1,3 +1,4 @@
+const moment = require("moment/moment");
 const config = require("../config/auth.config");
 const db = require("../models");
 const { user: User, role: Role, refreshToken: RefreshToken } = db;
@@ -67,6 +68,9 @@ exports.signin = (req, res) => {
         fullName: user.fullName,
         accessToken: token,
         refreshToken: refreshToken,
+        expiryTs: config.jwtExpiration,
+        expiredTime: moment().add(config.jwtExpiration, 'seconds').format('YYYY-MM-DD HH:mm:ss'),
+        refreshExpirationTs: config.jwtRefreshExpiration
       })
     );
   });
