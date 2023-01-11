@@ -9,12 +9,6 @@ exports.isEmptyObject = (obj) => {
   return true;
 };
 
-exports.momentTime = () => {
-  var moment = require("moment-timezone");
-  moment().tz("Indochina Time");
-  return moment;
-};
-
 const resultApi = function (result) {
   const message = "Thao tác thành công";
   return {
