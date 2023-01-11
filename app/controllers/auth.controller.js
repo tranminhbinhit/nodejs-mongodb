@@ -121,10 +121,14 @@ exports.refreshToken = async (req, res) => {
       }
     );
 
+    const expiredTime = moment().add(config.jwtExpiration, 'seconds');
     return res.status(200).json(
       resultApi({
         accessToken: newAccessToken,
         refreshToken: refreshToken.token,
+        expiryTs: expiredTime.unix(),
+        expiredTime: expiredTime.format('YYYY-MM-DD HH:mm:ss'),
+        refreshExpirationTs: config.jwtRefreshExpiration
       })
     );
   } catch (err) {
