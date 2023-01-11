@@ -5,7 +5,7 @@ const { user: User, role: Role, refreshToken: RefreshToken } = db;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-const { resultApi, resultApiCreateUpdate } = require("../../src/utils/utils");
+const { resultApi, resultApiCreateUpdate, momentTime } = require("../../src/utils/utils");
 
 exports.signup = (req, res) => {
   const user = new User({
@@ -59,7 +59,7 @@ exports.signin = (req, res) => {
     });
 
     let refreshToken = await RefreshToken.createToken(user);
-    const expiredTime = moment().add(config.jwtExpiration, 'seconds');
+    const expiredTime = momentTime().add(config.jwtExpiration, 'seconds');
     res.status(200).send(
       resultApi({
         id: user._id,
@@ -121,7 +121,7 @@ exports.refreshToken = async (req, res) => {
       }
     );
 
-    const expiredTime = moment().add(config.jwtExpiration, 'seconds');
+    const expiredTime = momentTime().add(config.jwtExpiration, 'seconds');
     return res.status(200).json(
       resultApi({
         accessToken: newAccessToken,

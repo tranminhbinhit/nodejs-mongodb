@@ -2,12 +2,18 @@
 
 exports.isEmpty = (value) => {
   return value === undefined || value === null || value === "";
-}
+};
 
 exports.isEmptyObject = (obj) => {
   if (obj !== null && obj !== undefined) return Object.keys(obj).length === 0;
   return true;
-}
+};
+
+exports.momentTime = () => {
+  var moment = require("moment-timezone");
+  moment().tz("Indochina Time");
+  return moment;
+};
 
 const resultApi = function (result) {
   const message = "Thao tác thành công";
