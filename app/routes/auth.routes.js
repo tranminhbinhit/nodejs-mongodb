@@ -19,6 +19,8 @@ router.post(
 
 router.post("/signin", controller.signin);
 
+router.post("/signinsocial", controller.signinSocial);
+
 router.post("/refreshtoken", controller.refreshToken);
 
 module.exports = router;

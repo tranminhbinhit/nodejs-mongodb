@@ -5,6 +5,7 @@ module.exports = mongoose => {
       userName: String,
       fullName: String,
       password: String,
+      socialAuthen: Object,
 
       isActive: Boolean,
       isDelete: Boolean,
